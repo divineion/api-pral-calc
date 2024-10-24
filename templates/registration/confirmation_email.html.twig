@@ -1,0 +1,12 @@
+<div class="email-confirmation-container">
+    <h1>Bienvenue sur Pral-Calc !</h1>
+    <p>
+        Merci de bien vouloir confirmer votre adresse e-mail en ciquant sur le lien suivant : <br><br>
+        <a href="{{ signedUrl|raw }}">Je confirme mon adresse e-mail !</a><br><br>
+    </p>
+    <p>Ce lien expire dans {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
+    <p>
+    <p>
+        A bientôt !
+    </p>
+</div>
