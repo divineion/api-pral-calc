@@ -65,13 +65,14 @@ use Symfony\Component\Routing\Attribute\Route;
                 $cookie = Cookie::create('auth_token')
                     ->withValue($token)
                     ->withExpires(time()+604800) // 7 days
-                    ->withSecure(true)
-                    ->withSameSite('lax')
+                    ->withSecure(true) // set to true on production
+                    ->withSameSite('none') //set to lax on production
                     ->withPartitioned(true)
-                    ->withDomain('localhost')
+                    //->withDomain('localhost') 
                     ->withHttpOnly(true);
 
                 $response->headers->setCookie($cookie);
+                $this->logger->info('set cookie with token, value : '. $token);
 
                 return $response;
 
