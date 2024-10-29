@@ -67,4 +67,15 @@ class RecipeRepository extends ServiceEntityRepository
                 ->select('r.id', 'r.title', 'r.instructions');
         return $qb->getQuery()->getResult();
     }
+
+    public function findAllAlimentsInRecipe($value): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->select('a.food_label', 'a.id')
+            ->innerJoin('r.aliments', 'a')
+            ->where('r.id = :val')
+            ->setParameter('val', $value);
+
+        return $qb->getQuery()->getResult();
+    }
 }
