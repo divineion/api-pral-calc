@@ -64,7 +64,9 @@ class RecipeRepository extends ServiceEntityRepository
     public function findAll(): array
     {
         $qb = $this->createQueryBuilder('r')
-                ->select('r.id', 'r.title', 'r.instructions');
+            ->select('r.id', 'r.title', 's.name as subcategory', 'c.name as category')
+            ->leftJoin('r.category', 'c')
+            ->leftJoin('r.subCategory', 's');
         return $qb->getQuery()->getResult();
     }
 
