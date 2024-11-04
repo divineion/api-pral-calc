@@ -12,15 +12,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AllowDynamicProperties] class ApiLoginController extends AbstractController
 {
     private LoggerInterface $logger;
-    public function __construct(LoggerInterface $logger, JWTTokenManagerInterface $tokenManager, UserRepository $userRepository)
+    public function __construct(LoggerInterface $logger, JWTTokenManagerInterface $tokenManager, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->logger = $logger;
         $this->tokenManager = $tokenManager;
         $this->userRepository = $userRepository;
+        $this->userPasswordHasher = $userPasswordHasher;
     }
     #[Route('/api/login_check', name: 'app_api_login_check', methods: ['POST'])]
     public function index(
@@ -29,9 +31,10 @@ use Symfony\Component\Routing\Attribute\Route;
     {
         $data = json_decode($request->getContent(), true);
         $username = $data["username"];
+        $password = $data["password"];
         $user = $this->userRepository->findOneByIdentifier($username);
 
-        if (null !== $user) {
+        if (null !== $user && $this->userPasswordHasher->isPasswordValid($user, $password)) {
             try {
                 $token = $this->tokenManager->create($user);
 
@@ -82,10 +85,10 @@ use Symfony\Component\Routing\Attribute\Route;
             }
         } else {
             $this->logger->warning('No user found for given credentials.');
-            return new JsonResponse([
-                'message' => 'missing credentials',
+            return new JsonResponse(
+                ['message' => 'missing credentials'],
                 Response::HTTP_UNAUTHORIZED
-            ]);
+            );
         }
     }
 }

@@ -20,7 +20,6 @@ use Symfony\Component\Routing\Attribute\Route;
     public const ROUTE_USER_FETCH = 'user_fetch';
     public const ROUTE_USER_DELETE = 'user_delete';
     public const ROUTE_FIND_ALL_USER_EVENTS = 'find_all_user_events';
-    public const ROUTE_FIND_ALL_USER_RECIPES = 'find_all_user_recipes';
 
     public function __construct(
         UserRepository $repo,
@@ -98,28 +97,6 @@ use Symfony\Component\Routing\Attribute\Route;
                 "userId" => $user->getId(),
                 "username" => $user->getFullName()]
             );
-    }
-
-    #[Route('api/profile/{id}/recipes', name: self::ROUTE_FIND_ALL_USER_RECIPES, methods: Request::METHOD_GET)]
-    public function fetchUserRecipes(
-    User $user,
-    ) :JsonResponse
-    {
-        $recipes = $this->recipeRepository->findRecipesByUserId($user);
-
-        $recipesArray = array_map(function($recipe) {
-            return [
-                'id' => $recipe->getId(),
-                'title' => $recipe->getTitle(),
-                'instructions' => $recipe->getInstructions(),
-                'category' => $recipe->getCategory()->getName(),
-                'subcategory' => $recipe->getSubcategory()->getName(),
-                'quantities' => $recipe->getQuantities(),
-                'aliments' => $this->recipeRepository->findAllAlimentsInRecipe($recipe),
-            ];
-        }, $recipes);
-
-        return new JsonResponse($recipesArray);
     }
 
     #[Route('/api/profile/verify/{username}', methods: Request::METHOD_GET)]
