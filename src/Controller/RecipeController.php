@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use AllowDynamicProperties;
 use App\Entity\Recipe;
+use App\Entity\User;
 use App\Repository\AlimRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\RecipeRepository;
@@ -22,16 +23,20 @@ use Symfony\Component\Routing\Attribute\Route;
     public const ROUTE_FETCH = 'recipe_fetch';
     public const ROUTE_RECIPE_ALIM = 'recipe_alim_fetch';
     public const ROUTE_FIND_ALL = 'recipe_find_all';
+    public const ROUTE_FIND_LATEST = 'recipe_find_latest';
     public const ROUTE_CREATE = 'recipe_create';
     public const ROUTE_EDIT = 'recipe_';
+    public const ROUTE_FIND_ALL_USER_RECIPES = "ROUTE_FIND_ALL_USER_RECIPES";
 
     public function __construct(
         RecipeRepository $recipeRepository,
         AlimRepository $alimRepository,
+        UserRepository $userRepository,
     )
     {
         $this->recipeRepository = $recipeRepository;
         $this->alimRepository = $alimRepository;
+        $this->userRepository = $userRepository;
     }
 
     #[Route('/api/recipe/{id}', name: self::ROUTE_FETCH, methods: request::METHOD_GET)]
@@ -53,7 +58,19 @@ use Symfony\Component\Routing\Attribute\Route;
                 "subcategory" => $recipe->getSubCategory()->getName(),
                 "quantities" => $recipe->getQuantities(),
                 "aliments" => $this->recipeRepository->findAllAlimentsInRecipe($recipe),
+                "user" => $recipe->getUser()->getFullName(),
             ];
+
+        return new JsonResponse($data);
+    }
+
+    #[Route('/api/recipes/latest', name: self::ROUTE_FIND_LATEST, methods: request::METHOD_GET)]
+    public function fetchLatest(
+        Request $request,
+        ?Recipe $recipe,
+    ): JsonResponse
+    {
+        $data = $this->recipeRepository->findLatest();
 
         return new JsonResponse($data);
     }
@@ -116,5 +133,27 @@ use Symfony\Component\Routing\Attribute\Route;
         $em->flush();
 
         return new JsonResponse(['message' => 'Recette créée'], Response::HTTP_CREATED);
+    }
+
+    #[Route('api/recipes/user/{id}', name: self::ROUTE_FIND_ALL_USER_RECIPES, methods: Request::METHOD_GET)]
+    public function fetchUserRecipes(
+        User $user,
+    ) :JsonResponse
+    {
+        $recipes = $this->recipeRepository->findRecipesByUserId($user);
+
+        $recipesArray = array_map(function($recipe) {
+            return [
+                'id' => $recipe->getId(),
+                'title' => $recipe->getTitle(),
+                'instructions' => $recipe->getInstructions(),
+                'category' => $recipe->getCategory()->getName(),
+                'subcategory' => $recipe->getSubcategory()->getName(),
+                'quantities' => $recipe->getQuantities(),
+                'aliments' => $this->recipeRepository->findAllAlimentsInRecipe($recipe),
+            ];
+        }, $recipes);
+
+        return new JsonResponse($recipesArray);
     }
 }
