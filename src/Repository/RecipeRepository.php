@@ -61,6 +61,17 @@ class RecipeRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findLatestRecipesByUserId($value): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->andWhere('r.user = :val')
+            ->setParameter('val', $value)
+            ->orderBy('r.id', 'DESC')
+            ->setMaxResults(1);
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function findAll(): array
     {
         $qb = $this->createQueryBuilder('r')
@@ -80,4 +91,17 @@ class RecipeRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findLatest()
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->select('r.id', 'r.title', 's.name as subcategory', 'c.name as category')
+            ->leftJoin('r.subCategory', 's')
+            ->leftJoin('r.category', 'c')
+            ->orderBy('r.id', 'DESC')
+            ->setMaxResults(3);
+
+        return $qb->getQuery()->getResult();
+    }
+
 }
