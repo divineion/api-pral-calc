@@ -61,10 +61,47 @@ class RecipeRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findLatestRecipesByUserId($value): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->andWhere('r.user = :val')
+            ->setParameter('val', $value)
+            ->orderBy('r.id', 'DESC')
+            ->setMaxResults(1);
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function findAll(): array
     {
         $qb = $this->createQueryBuilder('r')
-                ->select('r.id', 'r.title', 'r.instructions');
+            ->select('r.id', 'r.title', 's.name as subcategory', 'c.name as category')
+            ->leftJoin('r.category', 'c')
+            ->leftJoin('r.subCategory', 's');
         return $qb->getQuery()->getResult();
     }
+
+    public function findAllAlimentsInRecipe($value): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->select('a.food_label', 'a.id')
+            ->innerJoin('r.aliments', 'a')
+            ->where('r.id = :val')
+            ->setParameter('val', $value);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findLatest()
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->select('r.id', 'r.title', 's.name as subcategory', 'c.name as category')
+            ->leftJoin('r.subCategory', 's')
+            ->leftJoin('r.category', 'c')
+            ->orderBy('r.id', 'DESC')
+            ->setMaxResults(3);
+
+        return $qb->getQuery()->getResult();
+    }
+
 }
