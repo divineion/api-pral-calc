@@ -106,7 +106,7 @@ use Symfony\Component\Routing\Attribute\Route;
     }
 
 
-    #[Route('/api/event/{id}/delete', name: self::ROUTE_DELETE, methods: Request::METHOD_DELETE)]
+    #[Route('/api/event/{id}', name: self::ROUTE_DELETE, methods: Request::METHOD_DELETE)]
     public function delete(
         Request $request,
         Event $event,
@@ -114,7 +114,6 @@ use Symfony\Component\Routing\Attribute\Route;
     ): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $useremail = $data["useremail"];
         $authHeaders = $request->headers->get("Authorization");
         $token = substr($authHeaders, 7);
         
@@ -127,7 +126,7 @@ use Symfony\Component\Routing\Attribute\Route;
         $tokenUserId = (int) $userData["id"];
         $TokenUsername = $userData["username"];
 
-        if ($tokenUserId == $event->getUser()->getId() && $TokenUsername == $useremail ) {
+        if ($tokenUserId == $event->getUser()->getId()) {
             $em->remove($event);
             $em->flush();
 
