@@ -48,7 +48,7 @@ readonly class RecaptchaVerifier
             $validation = json_decode($response->getContent(), true);
 
             if(json_last_error() !== JSON_ERROR_NONE) {
-                throw new Exception(ApiMessages::JSON_ERROR." de la réponse de l'API Google reCAPTCHA");
+                throw new Exception("Erreur lors du traitement de la réponse JSON du service Google reCAPTCHA.");
             }
 
             return new JsonResponse([
