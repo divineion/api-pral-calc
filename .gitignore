@@ -10,6 +10,8 @@
 /public/bundles/
 /var/
 /vendor/
+/config/packages/nelmio_cors.yaml
+config/bundles.php
 ###< symfony/framework-bundle ###
 
 ###> lexik/jwt-authentication-bundle ###
