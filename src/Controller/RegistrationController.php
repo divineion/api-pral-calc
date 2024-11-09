@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\AppLoginAuthenticator;
 use App\Security\EmailVerifier;
+use App\Security\RecaptchaVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -28,6 +29,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 {
     public function __construct(
         private readonly EmailVerifier $emailVerifier,
+        private readonly RecaptchaVerifier $recaptchaVerifier,
         UserController $userController,
         LoggerInterface $logger,
         ParameterBagInterface $parameterBag,
@@ -50,9 +52,13 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
         Security $security,
     ): ? JsonResponse
     {
+
+        $data = json_decode($request->getContent(), true);
+
+        $this->recaptchaVerifier->verifyRecaptcha($data["recaptchaToken"]);
+
         try {
             $user = new User();
-            $data = json_decode($request->getContent(), true);
             $email = $data['email'];
             $username = $data['username'];
             $password = $data['password'];

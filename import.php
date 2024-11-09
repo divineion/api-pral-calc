@@ -6,12 +6,12 @@ use League\Csv\Reader;
 use Symfony\Component\Dotenv\Dotenv;
 
 $dotenv = new Dotenv();
-$dotenv->load(__DIR__ . '/.env.prod.local');
+$dotenv->load(__DIR__ . '/.env');
 
 /* connexion */
 $server = $_ENV["DATABASE_HOST"];
 $user = $_ENV["DATABASE_USER"];
-$password = $_ENV["DATABASE_TEMPORARY_PASSWORD"];
+$password = $_ENV["DATABASE_PASSWORD"];
 $dataBaseName = $_ENV["DATABASE_NAME"];
 
 try {
