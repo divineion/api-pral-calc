@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use AllowDynamicProperties;
+use App\Helpers\ApiMessages;
 use App\Repository\UserRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -84,9 +85,22 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
                 return new JsonResponse(['message' => 'Error creating token'], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         } else {
-            $this->logger->warning('No user found for given credentials.');
+            if (!$user) {
+                return new JsonResponse(
+                    ['message' => ApiMessages::REGISTER_FAILURE_UNKNOWN_USER],
+                    Response::HTTP_UNAUTHORIZED
+                );
+            }
+
+            elseif ($password !== $this->userPasswordHasher->hashPassword($user, $user->getPassword())) {
+                return new JsonResponse(
+                    ['message' => ApiMessages::REGISTER_FAILURE_PASSWORD_ERROR],
+                    Response::HTTP_UNAUTHORIZED
+                );
+            }
+
             return new JsonResponse(
-                ['message' => 'missing credentials'],
+                ['message' => "Identifiants manquants ou invalides"],
                 Response::HTTP_UNAUTHORIZED
             );
         }
