@@ -6,7 +6,8 @@
 /config/secrets/dev/dev.decrypt.private.php
 /config/secrets/prod/prod.encrypt.public.php
 /config/secrets/dev/dev.encrypt.public.php
-/config/secrets/staging
+/config/secrets/staging/staging.decrypt.private.php
+/config/secrets/staging/staging.encrypt.public.php
 /public/bundles/
 /var/
 /vendor/
