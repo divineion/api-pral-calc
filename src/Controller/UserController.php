@@ -95,8 +95,9 @@ use Symfony\Component\Routing\Attribute\Route;
         return new JsonResponse(
             [
                 "userId" => $user->getId(),
-                "username" => $user->getFullName()]
-            );
+                "username" => $user->getFullName(),
+                "customization" => $user->getNutrientsDisplayPreference()
+            ]);
     }
 
     #[Route('/api/profile/verify/{username}', methods: Request::METHOD_GET)]

@@ -95,7 +95,7 @@ class RecipeRepository extends ServiceEntityRepository
     public function findLatest()
     {
         $qb = $this->createQueryBuilder('r')
-            ->select('r.id', 'r.title', 's.name as subcategory', 'c.name as category')
+            ->select('r.id', 'r.title', 's.name as subcategory', 'c.name as category', 'r.pralIndex')
             ->leftJoin('r.subCategory', 's')
             ->leftJoin('r.category', 'c')
             ->orderBy('r.id', 'DESC')
