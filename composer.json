@@ -15,30 +15,30 @@
         "league/csv": "^9.16.0",
         "lexik/jwt-authentication-bundle": "^3.1.0",
         "nelmio/cors-bundle": "^2.5",
-        "symfony/console": "7.0.*",
-        "symfony/dotenv": "7.0.*",
+        "symfony/console": "7.1.*",
+        "symfony/dotenv": "7.1.*",
         "symfony/flex": "^2",
-        "symfony/framework-bundle": "7.0.*",
-        "symfony/google-mailer": "7.0.*",
-        "symfony/http-client": "7.0.*",
-        "symfony/mailer": "7.0.*",
-        "symfony/property-info": "7.0.*",
-        "symfony/runtime": "7.0.*",
-        "symfony/security-bundle": "7.0.*",
-        "symfony/translation": "7.0.*",
-        "symfony/validator": "7.0.*",
-        "symfony/yaml": "7.0.*"
+        "symfony/framework-bundle": "7.1.*",
+        "symfony/google-mailer": "7.1.*",
+        "symfony/http-client": "7.1.*",
+        "symfony/mailer": "7.1.*",
+        "symfony/property-info": "7.1.*",
+        "symfony/runtime": "7.1.*",
+        "symfony/security-bundle": "7.1.*",
+        "symfony/translation": "7.1.*",
+        "symfony/validator": "7.1.*",
+        "symfony/yaml": "7.1.*"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.6",
         "phpunit/phpunit": "^9.5",
-        "symfony/browser-kit": "7.0.*",
-        "symfony/css-selector": "7.0.*",
-        "symfony/debug-bundle": "7.0.*",
+        "symfony/browser-kit": "7.1.*",
+        "symfony/css-selector": "7.1.*",
+        "symfony/debug-bundle": "7.1.*",
         "symfony/maker-bundle": "^1.60",
         "symfony/monolog-bundle": "^3.0",
         "symfony/phpunit-bridge": "^7.1",
-        "symfony/stopwatch": "7.0.*"
+        "symfony/stopwatch": "7.1.*"
     },
     "config": {
         "allow-plugins": {
@@ -86,7 +86,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.0.*"
+            "require": "7.1.*"
         }
     }
 }
