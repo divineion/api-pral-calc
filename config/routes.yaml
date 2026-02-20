@@ -6,4 +6,4 @@ controllers:
 
 api_login_check:
     path: /api/login_check
-    controller: App/Controller/ApiLoginController::index
+    # No controller — intercepted by security firewall json_login
