@@ -44,6 +44,7 @@ try {
         $headerSlug[] = $titre_colonne;
     }
 
+    $connexion->exec("SET FOREIGN_KEY_CHECKS=0");
     $dropTableQuery = "DROP TABLE IF EXISTS alim";
     $connexion->exec($dropTableQuery);
 
@@ -56,7 +57,7 @@ try {
     /* ajouter colonne id et redéfinir les types de colonnes */
     $changeColTypeQuery = "
         ALTER TABLE `alim`
-        ADD `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST,
+        ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST,
         MODIFY `alim_code` INT NULL DEFAULT NULL, 
         MODIFY `nrj_kj` FLOAT NULL DEFAULT NULL,
         MODIFY `nrj_kcal` FLOAT NULL DEFAULT NULL,
@@ -126,6 +127,7 @@ try {
     ";
 
     $connexion->exec($changeColTypeQuery);
+    $connexion->exec("SET FOREIGN_KEY_CHECKS=1");
 
     /* préparer la requête d'insertion */
     $sql = "INSERT INTO alim (" . implode(', ', $sqlColonneRaw) . ") VALUES (" . implode(', ', array_fill(0, count($sqlColonneRaw), '?')) . ") 

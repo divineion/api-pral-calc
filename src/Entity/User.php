@@ -50,6 +50,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isArchived = false;
 
+    #[ORM\Column(length: 64, nullable: true, unique: true)]
+    private ?string $verificationToken = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $tokenExpiresAt = null;
+
     /**
      * @var Collection<int, Recipe>
      */
@@ -268,6 +274,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setMemberSince(string $memberSince): self {
         $this->memberSince = $memberSince;
+
+        return $this;
+    }
+
+    public function getVerificationToken(): ?string
+    {
+        return $this->verificationToken;
+    }
+
+    public function setVerificationToken(?string $token): self
+    {
+        $this->verificationToken = $token;
+
+        return $this;
+    }
+
+    public function getTokenExpiresAt(): ?\DateTimeImmutable
+    {
+        return $this->tokenExpiresAt;
+    }
+
+    public function setTokenExpiresAt(?\DateTimeImmutable $dt): self
+    {
+        $this->tokenExpiresAt = $dt;
 
         return $this;
     }
