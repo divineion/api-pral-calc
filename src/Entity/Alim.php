@@ -16,7 +16,7 @@ class Alim
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $food_label = null;
 
     #[ORM\Column(type:types::DECIMAL, precision: 5, scale: 2)]
