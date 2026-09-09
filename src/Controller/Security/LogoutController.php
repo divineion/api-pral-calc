@@ -2,8 +2,7 @@
 
 namespace App\Controller\Security;
 
-use App\Repository\RefreshTokenRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Gesdinet\JWTRefreshTokenBundle\Model\RefreshTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,16 +13,14 @@ class LogoutController extends AbstractController
     #[Route('/api/logout', name: 'api_logout', methods: ['POST'])]
     public function logout(
         Request $request,
-        RefreshTokenRepository $refreshTokenRepository,
-        EntityManagerInterface $em,
+        RefreshTokenManagerInterface $refreshTokenManager,
     ): JsonResponse {
         $tokenValue = $request->cookies->get('REFRESH_TOKEN');
 
         if ($tokenValue) {
-            $refreshToken = $refreshTokenRepository->findOneBy(['refreshToken' => $tokenValue]);
+            $refreshToken = $refreshTokenManager->get($tokenValue);
             if ($refreshToken) {
-                $em->remove($refreshToken);
-                $em->flush();
+                $refreshTokenManager->delete($refreshToken);
             }
         }
 
