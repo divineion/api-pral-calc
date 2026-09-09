@@ -3,6 +3,11 @@ Cette API REST gère le suivi nutritionnel individuel, le calcul de l'indice PRA
 la création de recettes personnalisées, la gestion d'un journal de bord alimentaire ainsi que l'authentification 
 et l'autorisation des utilisateurs.
 
+## Architecture
+Cette application Symfony fonctionne comme une API backend. Elle expose les données nutritionnelles de la table Ciqual 
+consommées par une application cliente développée en React.
+Le dépôt du frontend React est accessible [ici](https://github.com/divineion/client-pral-calc)
+
 ## 1. Rôle
 L'API fournit les fonctionnalités suivantes :
  - Inscription avec vérification de l'adresse e-mail
@@ -85,10 +90,11 @@ L'application utilise le composant Secrets pour stocker sa configuration, compl�
  - OpenSSL
 
 ### 1. Cloner et installer les dépendances
-git clone <url-du-repo> (je dois remettre l'url du dépôt ? ssh ou https ?)
+```
+git clone https://github.com/divineion/api-pral-calc
 cd pral-calc-api
-composer install
-
+composer install`
+```
 ### 2. Configuration des secrets d'environnement
 Deux approches sont possibles pour configurer les identifiants locaux :
 
